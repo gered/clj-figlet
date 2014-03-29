@@ -24,14 +24,42 @@
      :full-layout   (get params 6)
      :codetag-count (get params 7)}))
 
-(defn- parse-basic-chars [header char-lines]
-  )
+(defn- parse-basic-chars [header chars]
+  (->> chars
+       (map
+         (fn [ascii-code char-lines]
+           [ascii-code char-lines])
+         (range 32 127))
+       (reduce
+         (fn [charmap [ascii-code char-lines]]
+           (assoc charmap (char ascii-code) char-lines))
+         {})))
 
-(defn- parse-ext-chars [header char-lines]
-  )
+(defn- parse-ext-chars [header chars]
+  {(char 196) (nth chars 0)
+   (char 214) (nth chars 1)
+   (char 220) (nth chars 2)
+   (char 228) (nth chars 3)
+   (char 246) (nth chars 4)
+   (char 252) (nth chars 5)
+   (char 223) (nth chars 6)})
 
-(defn- parse-other-chars [header char-lines]
-  )
+(defn- parse-other-chars [header chars]
+  (->> chars
+       (map
+         (fn [lines]
+           (let [desc-line       (first lines)
+                 char-lines      (rest lines)
+                 [_ char-code _] (re-find #"^(.*)(?: {2})(.*)$" desc-line)
+                 decoded-code    (Integer/decode char-code)]
+             (if (pos? decoded-code)
+               [decoded-code char-lines]))))
+       (reduce
+         (fn [charmap [char-code char-lines]]
+           (if-not (nil? char-code)
+             (assoc charmap (char char-code) char-lines)
+             charmap))
+         {})))
 
 (defn load-flf [file]
   (let [flf-file (slurp file)]
