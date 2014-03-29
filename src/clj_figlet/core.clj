@@ -121,3 +121,10 @@
   (->> (str/split s #"\n")
        (map #(render-line % flf))
        (apply concat)))
+
+(defn render-out [flf & more]
+  (let [s     (str/join " " more)
+        lines (render s flf)]
+    (->> lines
+         (str/join \newline)
+         (clojure.core/print))))
