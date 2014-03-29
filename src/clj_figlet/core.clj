@@ -100,8 +100,8 @@
         (fn [^String char-line ^String output-line]
           (.concat output-line
                    (-> char-line
-                       (.replaceAll "@" "")
-                       (.replaceAll hardblank " "))))
+                       (.replace "@" "")
+                       (.replace hardblank " "))))
         char-lines
         lines)
       lines)))
