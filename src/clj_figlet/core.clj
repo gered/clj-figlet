@@ -9,12 +9,14 @@
 (def num-ext-chars 7)
 
 (defn- parse-flf-header [header-line]
-  (let [parts  (str/split header-line #" ")
-        params (->> parts
-                    (rest)
-                    (map #(Integer/parseInt %))
-                    (vec))]
-    {:hardblank    (-> parts first last)
+  (let [parts     (str/split header-line #" ")
+        hardblank (-> parts first last)
+        params    (->> parts
+                       (rest)
+                       (map #(Integer/parseInt %))
+                       (vec))]
+    {:hardblank     hardblank
+     :hardblank-str (str hardblank)   ; we'll be using this a fair bit, sometimes as a string, not a char
      :height        (get params 0)
      :baseline      (get params 1)
      :max-length    (get params 2)
@@ -89,7 +91,7 @@
 
 (defn- render-char [c flf lines]
   (let [char-lines (get-in flf [:chars c])
-        hardblank  (str (get-in flf [:header :hardblank]))]
+        hardblank  (get-in flf [:header :hardblank-str])]
     (if char-lines
       (map
         (fn [^String char-line ^String output-line]
