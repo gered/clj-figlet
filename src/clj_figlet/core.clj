@@ -92,7 +92,7 @@
 (defn- get-initial-output-lines [flf]
   (take (get-in flf [:header :height]) (repeat "")))
 
-(defn- render-char [c flf lines]
+(defn- render-char [^Character c flf lines]
   (let [char-lines (get-in flf [:chars c])
         hardblank  (get-in flf [:header :hardblank-str])]
     (if char-lines
@@ -106,11 +106,13 @@
         lines)
       lines)))
 
-(defn render-line [s flf]
-  (let [output (get-initial-output-lines flf)]
+(defn render-line [^String s flf & [initial-output]]
+  (let [output (or initial-output (get-initial-output-lines flf))]
     (reduce
       (fn [out c]
-        (render-char c flf out))
+        (condp = c
+          \tab (render-line "        " flf out)
+          (render-char c flf out)))
       output
       s)))
 
