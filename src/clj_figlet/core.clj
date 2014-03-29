@@ -100,9 +100,9 @@
    that set of lines will be appended to and returned. If initial-output is specified,
    that collection should have the same size as the flf font height."
   [flf ^Character c & [initial-output]]
-  (let [output-lines (or initial-output (get-initial-output-lines flf))
-        char-lines   (get-in flf [:chars c])
-        hardblank    (get-in flf [:header :hardblank-str])]
+  (let [output-lines      (or initial-output (get-initial-output-lines flf))
+        char-lines        (get-in flf [:chars c])
+        ^String hardblank (get-in flf [:header :hardblank-str])]
     (if char-lines
       (map
         (fn [^String char-line ^String output-line]
