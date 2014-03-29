@@ -1,5 +1,4 @@
 (ns clj-figlet.core
-  (:import (java.io File))
   (:require [clojure.string :as str]))
 
 ; ascii 32 through 126 inclusive
