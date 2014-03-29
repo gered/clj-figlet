@@ -86,6 +86,9 @@ oooo oooo    ooo 888    888 888    888 .o888oo 888
 => nil
 ```
 
+Please note that currently, clj-figlet only supports the 'Full Size' layout mode as detailed in the FIGfont
+specifications. The 'Fitting Only' and 'Smushing' layout modes will be added in the future.
+
 ## License
 
 Distributed under the the MIT License. See LICENSE for more details.
