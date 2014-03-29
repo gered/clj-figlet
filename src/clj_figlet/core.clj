@@ -62,7 +62,10 @@
              charmap))
          {})))
 
-(defn load-flf [file]
+(defn load-flf
+  "Loads a FIGlet font from a file, returning the data needed to render text with it as a map.
+   This map can be passed to one of the render functions as the flf argument."
+  [file]
   (let [flf-file (slurp file)]
     (if-not (= "flf2a" (subs flf-file 0 5))
       (throw (new Exception (str "Not a valid flf font file: " file))))
@@ -91,7 +94,12 @@
 (defn- get-initial-output-lines [flf]
   (take (get-in flf [:header :height]) (repeat "")))
 
-(defn render-char [^Character c flf & [initial-output]]
+(defn render-char
+  "Renders a single character using the given FIGlet font. A new sequence of strings
+   representing the rendered output lines is returned, or if initial-output is provided,
+   that set of lines will be appended to and returned. If initial-output is specified,
+   that collection should have the same size as the flf font height."
+  [^Character c flf & [initial-output]]
   (let [output-lines (or initial-output (get-initial-output-lines flf))
         char-lines   (get-in flf [:chars c])
         hardblank    (get-in flf [:header :hardblank-str])]
@@ -107,7 +115,14 @@
         output-lines)
       output-lines)))
 
-(defn render-line [^String s flf & [initial-output]]
+(defn render-line
+  "Renders a single line of text using the given FIGlet font. A new sequence of strings
+   representing the rendered output lines is returned, or if initial-output is provided,
+   that set of lines will be appended to and returned. If initial-output is specified,
+   that collection should have the same size as the flf font height. Any characters
+   not present in the flf font are ignored, except for tab characters which are rendered
+   as 8 space characters."
+  [^String s flf & [initial-output]]
   (let [output (or initial-output (get-initial-output-lines flf))]
     (reduce
       (fn [out c]
@@ -117,14 +132,20 @@
       output
       s)))
 
-(defn render [^String s flf]
+(defn render
+  "Renders a string of text using the given FIGlet font. The rendered output is returned
+   as a sequence of lines. The text given is split up on each newline character found and
+   each line is rendered as a new line in the output. So the number of lines in the final
+   rendered output will be equal to [number of lines in 's'] * [height of flf font]"
+  [^String s flf]
   (->> (str/split s #"\n")
        (map #(render-line % flf))
        (apply concat)))
 
-(defn render-out [flf & more]
-  (let [s     (str/join " " more)
-        lines (render s flf)]
-    (->> lines
-         (str/join \newline)
-         (clojure.core/print))))
+(defn render-to-string
+  "Renders a string of text using the given FIGlet font. The rendered output is returned
+   as a single string which is created by concatenating each line of output from rendering
+   the same string using clj-figlet.core/render."
+  [^String s flf]
+  (->> (render s flf)
+       (str/join \newline)))
