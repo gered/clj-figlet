@@ -89,6 +89,9 @@
                  (parse-ext-chars header ext-chars)
                  (parse-other-chars header other-chars))})))
 
+(defn- get-initial-output-lines [flf]
+  (take (get-in flf [:header :height]) (repeat "")))
+
 (defn- render-char [c flf lines]
   (let [char-lines (get-in flf [:chars c])
         hardblank  (get-in flf [:header :hardblank-str])]
@@ -102,3 +105,11 @@
         char-lines
         lines)
       lines)))
+
+(defn render-line [s flf]
+  (let [output (get-initial-output-lines flf)]
+    (reduce
+      (fn [out c]
+        (render-char c flf out))
+      output
+      s)))
