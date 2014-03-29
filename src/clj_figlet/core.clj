@@ -100,7 +100,8 @@
         (fn [^String char-line ^String output-line]
           (.concat output-line
                    (-> char-line
-                       (.replace "@" "")
+                       (.replace "@" "")    ; endline
+                       (.replace "#" "")    ; also used as an endline
                        (.replace hardblank " "))))
         char-lines
         lines)
