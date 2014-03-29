@@ -81,8 +81,8 @@
           other-chars          (->> char-lines
                                     (drop (+ num-basic-char-lines num-ext-char-lines))
                                     (partition (inc char-height)))]
-      {:header      header
-       :basic-chars (parse-basic-chars header basic-chars)
-       :ext-chars   (parse-ext-chars header ext-chars)
-       :other-chars (parse-other-chars header other-chars)})))
-
+      {:header header
+       :chars  (merge
+                 (parse-basic-chars header basic-chars)
+                 (parse-ext-chars header ext-chars)
+                 (parse-other-chars header other-chars))})))
