@@ -113,3 +113,8 @@
         (render-char c flf out))
       output
       s)))
+
+(defn render [^String s flf]
+  (->> (str/split s #"\n")
+       (map #(render-line % flf))
+       (apply concat)))
