@@ -99,7 +99,7 @@
    representing the rendered output lines is returned, or if initial-output is provided,
    that set of lines will be appended to and returned. If initial-output is specified,
    that collection should have the same size as the flf font height."
-  [^Character c flf & [initial-output]]
+  [flf ^Character c & [initial-output]]
   (let [output-lines (or initial-output (get-initial-output-lines flf))
         char-lines   (get-in flf [:chars c])
         hardblank    (get-in flf [:header :hardblank-str])]
@@ -122,13 +122,13 @@
    that collection should have the same size as the flf font height. Any characters
    not present in the flf font are ignored, except for tab characters which are rendered
    as 8 space characters."
-  [^String s flf & [initial-output]]
+  [flf ^String s & [initial-output]]
   (let [output (or initial-output (get-initial-output-lines flf))]
     (reduce
       (fn [out c]
         (condp = c
-          \tab (render-line "        " flf out)
-          (render-char c flf out)))
+          \tab (render-line flf "        " out)
+          (render-char flf c out)))
       output
       s)))
 
@@ -137,15 +137,15 @@
    as a sequence of lines. The text given is split up on each newline character found and
    each line is rendered as a new line in the output. So the number of lines in the final
    rendered output will be equal to [number of lines in 's'] * [height of flf font]"
-  [^String s flf]
+  [flf ^String s]
   (->> (str/split s #"\n")
-       (map #(render-line % flf))
+       (map #(render-line flf %))
        (apply concat)))
 
 (defn render-to-string
   "Renders a string of text using the given FIGlet font. The rendered output is returned
    as a single string which is created by concatenating each line of output from rendering
    the same string using clj-figlet.core/render."
-  [^String s flf]
-  (->> (render s flf)
+  [flf ^String s]
+  (->> (render flf s)
        (str/join \newline)))
