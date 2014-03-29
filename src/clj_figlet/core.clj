@@ -86,3 +86,17 @@
                  (parse-basic-chars header basic-chars)
                  (parse-ext-chars header ext-chars)
                  (parse-other-chars header other-chars))})))
+
+(defn- render-char [c flf lines]
+  (let [char-lines (get-in flf [:chars c])
+        hardblank  (str (get-in flf [:header :hardblank]))]
+    (if char-lines
+      (map
+        (fn [^String char-line ^String output-line]
+          (.concat output-line
+                   (-> char-line
+                       (.replaceAll "@" "")
+                       (.replaceAll hardblank " "))))
+        char-lines
+        lines)
+      char-lines)))
