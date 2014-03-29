@@ -36,15 +36,11 @@ If we just cared about getting some nice output right away (e.g. for use when ou
   (clojure.string/join
     \newline
     (render-char flf \A)))
-      .o.
-     .888.
-    .8"888.
-   .8' `888.
-  .88ooo8888.
- .8'     `888.
-o88o     o8888o
-
-
+     _
+    / \
+   / _ \
+  / ___ \
+ /_/   \_\
 
 => nil
 ```
@@ -56,16 +52,12 @@ Rendering whole strings is just as easy:
   (clojure.string/join
     \newline
     (render flf "Hello, world!")))
-ooooo   ooooo           oooo  oooo                                                       oooo        .o8  .o.
-`888'   `888'           `888  `888                                                       `888       "888  888
- 888     888   .ooooo.   888   888   .ooooo.         oooo oooo    ooo  .ooooo.  oooo d8b  888   .oooo888  888
- 888ooooo888  d88' `88b  888   888  d88' `88b         `88. `88.  .8'  d88' `88b `888""8P  888  d88' `888  Y8P
- 888     888  888ooo888  888   888  888   888          `88..]88..8'   888   888  888      888  888   888  `8'
- 888     888  888    .o  888   888  888   888 .o.       `888'`888'    888   888  888      888  888   888  .o.
-o888o   o888o `Y8bod8P' o888o o888o `Y8bod8P' Y8P        `8'  `8'     `Y8bod8P' d888b    o888o `Y8bod88P" Y8P
-                                               '
-
-
+  _   _          _   _                                           _       _   _
+ | | | |   ___  | | | |   ___         __      __   ___    _ __  | |   __| | | |
+ | |_| |  / _ \ | | | |  / _ \        \ \ /\ / /  / _ \  | '__| | |  / _` | | |
+ |  _  | |  __/ | | | | | (_) |  _     \ V  V /  | (_) | | |    | | | (_| | |_|
+ |_| |_|  \___| |_| |_|  \___/  ( )     \_/\_/    \___/  |_|    |_|  \__,_| (_)
+                                |/
 => nil
 ```
 
@@ -73,15 +65,11 @@ For convenience sake, you can also use the `render-to-string` function:
 
 ```clojure
 (println (render-to-string flf "w00t!"))
-                   .oooo.     .oooo.       .   .o.
-                  d8P'`Y8b   d8P'`Y8b    .o8   888
-oooo oooo    ooo 888    888 888    888 .o888oo 888
- `88. `88.  .8'  888    888 888    888   888   Y8P
-  `88..]88..8'   888    888 888    888   888   `8'
-   `888'`888'    `88b  d88' `88b  d88'   888 . .o.
-    `8'  `8'      `Y8bd8P'   `Y8bd8P'    "888" Y8P
-
-
+              ___     ___    _     _
+ __      __  / _ \   / _ \  | |_  | |
+ \ \ /\ / / | | | | | | | | | __| | |
+  \ V  V /  | |_| | | |_| | | |_  |_|
+   \_/\_/    \___/   \___/   \__| (_)
 
 => nil
 ```
