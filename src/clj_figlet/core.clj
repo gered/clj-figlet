@@ -91,9 +91,10 @@
 (defn- get-initial-output-lines [flf]
   (take (get-in flf [:header :height]) (repeat "")))
 
-(defn- render-char [^Character c flf lines]
-  (let [char-lines (get-in flf [:chars c])
-        hardblank  (get-in flf [:header :hardblank-str])]
+(defn render-char [^Character c flf & [initial-output]]
+  (let [output-lines (or initial-output (get-initial-output-lines flf))
+        char-lines   (get-in flf [:chars c])
+        hardblank    (get-in flf [:header :hardblank-str])]
     (if char-lines
       (map
         (fn [^String char-line ^String output-line]
@@ -103,8 +104,8 @@
                        (.replace "#" "")    ; also used as an endline
                        (.replace hardblank " "))))
         char-lines
-        lines)
-      lines)))
+        output-lines)
+      output-lines)))
 
 (defn render-line [^String s flf & [initial-output]]
   (let [output (or initial-output (get-initial-output-lines flf))]
